@@ -1,0 +1,4 @@
+<Solution>
+  <Project Path="cp4-perfumaria-API/cp4-perfumaria-API.csproj" />
+  <Project Path="Perfumaria.Tests.Unit/Perfumaria.Tests.Unit.csproj" />
+</Solution>
