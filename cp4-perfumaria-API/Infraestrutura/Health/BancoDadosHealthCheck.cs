@@ -21,13 +21,13 @@ public class BancoDadosHealthCheck : IHealthCheck
             var conseguiuConectar = await _contexto.Database.CanConnectAsync(cancellationToken);
 
             return conseguiuConectar
-                ? HealthCheckResult.Healthy("Conexão com o banco Oracle está saudável.")
-                : HealthCheckResult.Unhealthy("Não foi possível estabelecer conexão com o banco Oracle.");
+                ? HealthCheckResult.Healthy("Conexão com o banco Azure SQL está saudável.")
+                : HealthCheckResult.Unhealthy("Não foi possível estabelecer conexão com o banco Azure SQL.");
         }
         catch (Exception ex)
         {
             return HealthCheckResult.Unhealthy(
-                "Erro ao tentar validar a conexão com o banco Oracle.",
+                "Erro ao tentar validar a conexão com o banco Azure SQL.",
                 exception: ex);
         }
     }

@@ -22,7 +22,7 @@ public class AppDbContext : DbContext
             entity.Property(p => p.Marca).HasColumnName("MARCA").HasMaxLength(100).IsRequired();
             entity.Property(p => p.Genero).HasColumnName("GENERO").HasConversion<string>().HasMaxLength(20);
             entity.Property(p => p.VolumeMl).HasColumnName("VOLUME_ML");
-            entity.Property(p => p.Preco).HasColumnName("PRECO").HasColumnType("NUMBER(10,2)");
+            entity.Property(p => p.Preco).HasColumnName("PRECO").HasColumnType("decimal(10,2)");
             entity.Property(p => p.AnoLancamento).HasColumnName("ANO_LANCAMENTO");
         });
 

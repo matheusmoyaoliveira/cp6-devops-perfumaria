@@ -27,10 +27,10 @@ builder.Host.UseSerilog((context, configuracao) =>
 });
 
 builder.Services.AddDbContext<AppDbContext>(options =>
-    options.UseOracle(builder.Configuration.GetConnectionString("OracleConnection")));
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 builder.Services.AddHealthChecks()
-    .AddCheck<BancoDadosHealthCheck>("banco_dados_oracle");
+    .AddCheck<BancoDadosHealthCheck>("banco_dados_sql");
 
 builder.Services.AddScoped<IPerfumeRepositorio, PerfumeRepositorio>();
 builder.Services.AddScoped<INotaOlfativaRepositorio, NotaOlfativaRepositorio>();
@@ -59,11 +59,8 @@ builder.Services.AddOpenTelemetry()
 
 var app = builder.Build();
 
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
+app.UseSwagger();
+app.UseSwaggerUI();
 
 app.UseMiddleware<CorrelationIdMiddleware>();
 app.UseSerilogRequestLogging();
