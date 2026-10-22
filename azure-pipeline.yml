@@ -1,0 +1,76 @@
+# CI da Perfumaria API: build, testes, checagem do script.sql e artefatos para a Release.
+trigger:
+  branches:
+    include:
+      - main
+
+pool:
+  vmImage: 'ubuntu-24.04'
+
+variables:
+  buildConfiguration: 'Release'
+  apiProject: 'cp4-perfumaria-API/cp4-perfumaria-API.csproj'
+  testProject: 'Perfumaria.Tests.Unit/Perfumaria.Tests.Unit.csproj'
+
+steps:
+  - task: UseDotNet@2
+    displayName: 'Instalar .NET SDK 8'
+    inputs:
+      packageType: 'sdk'
+      version: '8.0.x'
+
+  - task: DotNetCoreCLI@2
+    displayName: 'Restore (baixar pacotes NuGet)'
+    inputs:
+      command: 'restore'
+      projects: '**/*.csproj'
+
+  - task: DotNetCoreCLI@2
+    displayName: 'Build'
+    inputs:
+      command: 'build'
+      projects: '**/*.csproj'
+      arguments: '--configuration $(buildConfiguration) --no-restore'
+
+  - task: DotNetCoreCLI@2
+    displayName: 'Testes unitários (xUnit)'
+    inputs:
+      command: 'test'
+      projects: '$(testProject)'
+      arguments: '--configuration $(buildConfiguration) --no-build'
+      publishTestResults: true
+
+  - script: |
+      dotnet tool restore
+      dotnet ef migrations script --idempotent \
+        --project cp4-perfumaria-API \
+        --configuration $(buildConfiguration) --no-build \
+        --output $(Agent.TempDirectory)/script-gerado.sql
+
+      if ! diff --strip-trailing-cr script.sql $(Agent.TempDirectory)/script-gerado.sql > /dev/null; then
+        echo "##vso[task.logissue type=error]script.sql desatualizado. Rode: dotnet ef migrations script --idempotent --project cp4-perfumaria-API --output script.sql"
+        exit 1
+      fi
+      echo "script.sql está igual às migrations."
+    displayName: 'Conferir se o script.sql está atualizado'
+
+  - task: DotNetCoreCLI@2
+    displayName: 'Publish da API (gera o .zip)'
+    inputs:
+      command: 'publish'
+      publishWebProjects: false
+      projects: '$(apiProject)'
+      arguments: '--configuration $(buildConfiguration) --no-build --output $(Build.ArtifactStagingDirectory)/api'
+      zipAfterPublish: true
+
+  - task: CopyFiles@2
+    displayName: 'Copiar o script.sql para o artefato'
+    inputs:
+      Contents: 'script.sql'
+      TargetFolder: '$(Build.ArtifactStagingDirectory)/sql'
+
+  - task: PublishBuildArtifacts@1
+    displayName: 'Publicar artefato (drop)'
+    inputs:
+      PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+      ArtifactName: 'drop'
