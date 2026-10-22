@@ -5,7 +5,7 @@
 namespace Perfumaria.API.Migrations
 {
     /// <inheritdoc />
-    public partial class CriacaoInicial : Migration
+    public partial class CriacaoInicialSqlServer : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -14,10 +14,10 @@ namespace Perfumaria.API.Migrations
                 name: "T_PRF_NOTAS_OLFATIVAS",
                 columns: table => new
                 {
-                    ID = table.Column<int>(type: "NUMBER(10)", nullable: false)
-                        .Annotation("Oracle:Identity", "START WITH 1 INCREMENT BY 1"),
-                    NOME = table.Column<string>(type: "NVARCHAR2(100)", maxLength: 100, nullable: false),
-                    FAMILIA = table.Column<string>(type: "NVARCHAR2(20)", maxLength: 20, nullable: false)
+                    ID = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    NOME = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    FAMILIA = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false)
                 },
                 constraints: table =>
                 {
@@ -28,14 +28,14 @@ namespace Perfumaria.API.Migrations
                 name: "T_PRF_PERFUMES",
                 columns: table => new
                 {
-                    ID = table.Column<int>(type: "NUMBER(10)", nullable: false)
-                        .Annotation("Oracle:Identity", "START WITH 1 INCREMENT BY 1"),
-                    NOME = table.Column<string>(type: "NVARCHAR2(150)", maxLength: 150, nullable: false),
-                    MARCA = table.Column<string>(type: "NVARCHAR2(100)", maxLength: 100, nullable: false),
-                    GENERO = table.Column<string>(type: "NVARCHAR2(20)", maxLength: 20, nullable: false),
-                    VOLUME_ML = table.Column<int>(type: "NUMBER(10)", nullable: false),
-                    PRECO = table.Column<decimal>(type: "NUMBER(10,2)", nullable: false),
-                    ANO_LANCAMENTO = table.Column<int>(type: "NUMBER(10)", nullable: false)
+                    ID = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    NOME = table.Column<string>(type: "nvarchar(150)", maxLength: 150, nullable: false),
+                    MARCA = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    GENERO = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
+                    VOLUME_ML = table.Column<int>(type: "int", nullable: false),
+                    PRECO = table.Column<decimal>(type: "decimal(10,2)", nullable: false),
+                    ANO_LANCAMENTO = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -46,9 +46,9 @@ namespace Perfumaria.API.Migrations
                 name: "T_PRF_PERFUME_NOTA",
                 columns: table => new
                 {
-                    PERFUME_ID = table.Column<int>(type: "NUMBER(10)", nullable: false),
-                    NOTA_OLFATIVA_ID = table.Column<int>(type: "NUMBER(10)", nullable: false),
-                    POSICAO = table.Column<string>(type: "NVARCHAR2(20)", maxLength: 20, nullable: false)
+                    PERFUME_ID = table.Column<int>(type: "int", nullable: false),
+                    NOTA_OLFATIVA_ID = table.Column<int>(type: "int", nullable: false),
+                    POSICAO = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false)
                 },
                 constraints: table =>
                 {
