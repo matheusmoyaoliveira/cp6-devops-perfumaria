@@ -1,0 +1,2 @@
+# Scripts shell sempre com final de linha Linux (LF), em qualquer sistema
+*.sh text eol=lf
