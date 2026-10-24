@@ -16,7 +16,6 @@ public class Perfume
     private readonly List<PerfumeNota> _notas = new();
     public IReadOnlyCollection<PerfumeNota> Notas => _notas.AsReadOnly();
 
-    private const int AnoMinimoLancamento = 1900;
     protected Perfume() { } // necessário para o EF Core materializar via reflexão
 
     public Perfume(string nome, string marca, GeneroPerfume genero, int volumeMl, decimal preco, int anoLancamento)
@@ -29,7 +28,6 @@ public class Perfume
             throw new ArgumentException("O volume deve ser maior que zero.", nameof(volumeMl));
         if (preco <= 0)
             throw new ArgumentException("O preço deve ser maior que zero.", nameof(preco));
-        ValidarAnoLancamento(anoLancamento);
 
         Nome = nome;
         Marca = marca;
@@ -58,7 +56,6 @@ public class Perfume
             throw new ArgumentException("O volume deve ser maior que zero.", nameof(volumeMl));
         if (preco <= 0)
             throw new ArgumentException("O preço deve ser maior que zero.", nameof(preco));
-        ValidarAnoLancamento(anoLancamento);
 
         Nome = nome;
         Marca = marca;
@@ -66,14 +63,5 @@ public class Perfume
         VolumeMl = volumeMl;
         Preco = preco;
         AnoLancamento = anoLancamento;
-    }
-
-    private static void ValidarAnoLancamento(int anoLancamento)
-    {
-        var anoAtual = DateTime.UtcNow.Year;
-        if (anoLancamento < AnoMinimoLancamento || anoLancamento > anoAtual)
-            throw new ArgumentException(
-                $"O ano de lançamento deve estar entre {AnoMinimoLancamento} e {anoAtual}.",
-                nameof(anoLancamento));
     }
 }
