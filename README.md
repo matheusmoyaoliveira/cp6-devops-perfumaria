@@ -76,6 +76,13 @@ dotnet-tools.json             → Versão fixa do dotnet-ef
 
 ## Arquitetura de Nuvem e CI/CD
 
+![Arquitetura de CI/CD da Perfumaria API no Azure DevOps e na Microsoft Azure](docs/arquitetura.png)
+
+O diagrama é gerado a partir de `docs/arquitetura.html` (ícones oficiais da Azure).
+
+<details>
+<summary>Fluxo em texto</summary>
+
 ```
 Azure Boards (Task) ──> branch feature/* criada pela Task ──> Pull Request para a main
                                                   │  políticas: 1 revisor, work item obrigatório,
@@ -96,6 +103,8 @@ CD  perfumaria-cd (Release clássica, Windows) — stage Producao
 Azure — rg-cp6-perfumaria (Central US)
     App Service app-cp6-perfumaria-rm562822 ──> Azure SQL sqldb-perfumaria
 ```
+
+</details>
 
 ### Decisões de arquitetura
 
